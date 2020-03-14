@@ -1,6 +1,8 @@
-# You-Wallet-Android. A Professional operational crypto wallet. Dedicated to improving operation efficiency, convenience and safety. Special for Chief Operating Officer(COO).
+# You-Wallet-Android. A Professional operational crypto wallet. 
 
 [![License](https://img.shields.io/badge/license-GPL3-green.svg?style=flat)](https://github.com/fastlane/fastlane/blob/master/LICENSE)
+
+Dedicated to improving operation efficiency, convenience and safety. Special for Chief Operating Officer(COO).
 
 [<img src="https://raw.githubusercontent.com/youfund/you-wallet-android/master/resources/android_cover.png">](app/release/app-release.apk)
 
