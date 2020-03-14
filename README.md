@@ -1,13 +1,10 @@
 # You-Wallet-Android. A Professional operational crypto wallet. Dedicated to improving operation efficiency, convenience and safety. Special for Chief Operating Officer(COO).
 
-[![Build Status]()]()
-[![Black Duck Security Risk]()]()
 [![License](https://img.shields.io/badge/license-GPL3-green.svg?style=flat)](https://github.com/fastlane/fastlane/blob/master/LICENSE)
 
-[<img src="https://raw.githubusercontent.com/youfund/you-wallet-android/master/resources/android_cover.png">]()
+[<img src="https://raw.githubusercontent.com/youfund/you-wallet-android/master/resources/android_cover.png">](app/release/app-release.apk)
 
-[<img src=resources/android_cover.png>]()
-[<img src=resources/android_cover_2.png>]()
+[<img src=resources/android_cover_2.png>](app/release/app-release.apk)
 
 Welcome to YouWallet's open source Android app!
 
