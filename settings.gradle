@@ -1,0 +1,1 @@
+include ':app', ':tn', ':scan', ':banner', ':trustcore', ':tool_bar'

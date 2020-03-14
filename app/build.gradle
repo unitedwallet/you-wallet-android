@@ -1,0 +1,204 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+apply plugin: 'realm-android'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
+    defaultConfig {
+        applicationId "org.youwallet.app"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 2019122301
+        versionName "1.0.2"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled = true
+    }
+    buildTypes {
+        release {
+            // 混淆
+            minifyEnabled true
+            // 移除无用的resource文件
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/NOTICE' // will not include NOTICE file
+        exclude 'META-INF/LICENSE' // will not include LICENSE file
+        // as noted by @Vishnuvathsan you may also need to include
+        // variations on the file name. It depends on your dependencies.
+        // Some other common variations on notice and license file names
+        //exclude 'META-INF/notice'
+        //exclude 'META-INF/notice.txt'
+        //exclude 'META-INF/license'
+        //exclude 'META-INF/license.txt'
+    }
+    lintOptions {
+        abortOnError false
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+    configurations.all {
+        //循环一个个的依赖库
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            //获取当前循环到的依赖库
+            def requested = details.requested
+            //如果这个依赖库群组的名字是com.android.support
+            if (requested.group == 'com.android.support') {
+                //且其名字不是以multidex开头的
+                if (!requested.name.startsWith("multidex")) {
+                    //这里指定需要统一的依赖版本
+                    details.useVersion '28.0.0'
+                }
+            }
+        }
+    }
+
+}
+
+project.ext {
+    retrofitVersion = "2.3.0"
+    okhttpVersion = "3.9.0"
+    supportVersion = "28.0.0"
+    web3jVersion = "3.3.1-android"
+    gethVersion = "1.7.0"
+    gsonVersion = "2.8.2"
+    rxJavaVersion = "2.1.6"
+    rxAndroidVersion = "2.0.1"
+    daggerVersion = "2.15"
+}
+
+dependencies {
+
+    // Etherium client
+    implementation "org.web3j:core:$project.web3jVersion"
+
+    //  implementation "org.ethereum:geth:$project.gethVersion"
+    implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
+
+    //btc
+
+    // Http client
+    implementation "com.squareup.retrofit2:retrofit:$project.retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$project.retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$project.retrofitVersion"
+    implementation "com.squareup.okhttp3:okhttp:$project.okhttpVersion"
+    implementation "com.google.code.gson:gson:$project.gsonVersion"
+    implementation 'android.arch.lifecycle:runtime:1.1.1'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation "com.android.support:appcompat-v7:$project.supportVersion"
+    implementation "com.android.support:design:$project.supportVersion"
+    implementation "com.android.support:support-vector-drawable:$project.supportVersion"
+    implementation "com.android.support:recyclerview-v7:$project.supportVersion"
+    implementation 'com.android.support:multidex:1.0.3'
+
+    // Bar code scanning
+
+    //implementation "com.google.zxing:core:3.2.1"
+
+    //xys
+    implementation 'com.google.android.gms:play-services-vision:17.0.2'
+
+    //implementation "com.google.android.gms:play-services-vision:15.0.2"
+
+    // Sugar
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.github.apl-devs:appintro:v4.2.2'
+    implementation 'com.romandanylyk:pageindicatorview:1.0.0'
+    implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
+
+    // ReactiveX
+    implementation "io.reactivex.rxjava2:rxjava:$project.rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$project.rxAndroidVersion"
+
+    // Dagger 2
+
+    // Dagger core
+    implementation "com.google.dagger:dagger:$project.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$project.daggerVersion"
+
+    // Dagger Android
+    implementation "com.google.dagger:dagger-android-support:$project.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$project.daggerVersion"
+
+    // if you are not using support library, include this instead
+    implementation "com.google.dagger:dagger-android:$project.daggerVersion"
+
+    // Tests
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:2.2.2", {
+        exclude group: "com.android.support", module: "support-annotations"
+    })
+    androidTestImplementation('tools.fastlane:screengrab:1.1.0', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    // Fabric
+    implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+        transitive = true
+    }
+    implementation('com.crashlytics.sdk.android:answers:1.4.1@aar') {
+        transitive = true
+    }
+
+    // PW
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':tn')
+    implementation project(path: ':scan')
+
+    //compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
+
+    //wyb 增加v7 -preference包
+    implementation 'com.android.support:preference-v7:28.0.0'
+    implementation 'com.github.TrustWallet:trust-web3-provider:0.2.1'
+
+    // implementation 'com.github.TrustWallet:TrustSdk-android:0.01.13'
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.4.2'
+
+    //轮播图控件
+
+    /*    compile 'com.youth.banner:banner:1.4.10'*/
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation project(':banner')
+
+    ///Android可伸缩布局
+    implementation 'com.google.android:flexbox:1.0.0'
+    implementation 'com.github.jdsjlzx:LRecyclerView:1.5.4.3'
+
+    //设置状态栏颜色
+    implementation 'com.githang:status-bar-compat:0.3'
+    implementation project(':trustcore')
+
+
+    implementation 'com.jakewharton:butterknife:8.0.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.0.0'
+    implementation project(path: ':tool_bar')
+    implementation 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+    implementation 'com.github.hackware1993:MagicIndicator:1.5.0'
+
+    implementation 'com.airbnb.android:lottie:2.7.0'
+
+
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-29'
+    implementation 'org.jsoup:jsoup:1.10.1'
+
+
+}
